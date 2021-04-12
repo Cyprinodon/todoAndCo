@@ -5,46 +5,64 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "App\\": "src/"
         },
         "classmap": [
-            "app/AppKernel.php",
-            "app/AppCache.php"
+            "src/Kernel.php",
+            "src/KernelCache.php"
         ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "App\\Tests\\": "tests/"
         }
     },
     "require": {
         "php": ">=5.5.9",
-        "symfony/symfony": "^4.0",
-        "doctrine/orm": "^2.7.5",
-        "doctrine/doctrine-bundle": "^1.10",
-        "doctrine/doctrine-cache-bundle": "^1.4",
-        "symfony/monolog-bundle": "^3.5",
-        "sensio/framework-extra-bundle": "^3.0",
-        "monolog/monolog": "^1.22"
+        "sensio/framework-extra-bundle": "^6.1",
+        "symfony/flex": "^1.0",
+        "symfony/asset": "^5.2",
+        "composer/package-versions-deprecated": "1.11.99.1",
+        "symfony/proxy-manager-bridge": "^4.4",
+        "symfony/twig-bundle": "^4.4",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0",
+        "symfony/monolog-bundle": "^3.7",
+        "doctrine/doctrine-bundle": "^2.3",
+        "doctrine/doctrine-migrations-bundle": "^3.0",
+        "doctrine/orm": "^2.8",
+        "symfony/security-bundle": "4.4",
+        "symfony/validator": "^5.2",
+        "symfony/mailer": "^5.2",
+        "symfony/form": "^5.2",
+        "symfony/yaml": "^5.2"
+    },
+    "conflict": {
+        "symfony/symfony": "*"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "4.0.*"
+        "symfony/phpunit-bridge": "4.0.*",
+        "symfony/dotenv": "^5.2",
+        "symfony/maker-bundle": "^1.30",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "symfony/stopwatch": "^5.2",
+        "symfony/web-profiler-bundle": "^5.0"
     },
     "scripts": {
         "post-install-cmd": [
         ],
         "post-update-cmd": [
-        ]
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
     },
     "extra": {
-        "symfony-app-dir": "app",
-        "symfony-bin-dir": "bin",
-        "symfony-var-dir": "var",
-        "symfony-web-dir": "web",
-        "symfony-tests-dir": "tests",
-        "symfony-assets-install": "relative",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        }
+        "src-dir": "src",
+        "bin-dir": "bin",
+        "var-dir": "var",
+        "tests-dir": "tests",
+        "symfony-assets-install": "relative"
     }
 }
