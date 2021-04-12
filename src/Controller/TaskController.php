@@ -4,36 +4,48 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TaskController extends AbstractController
 {
     /**
      * @Route("/tasks", name="task_list")
+     * @param TaskRepository $taskRepository
+     * @return Response
      */
-    public function listAction()
+    public function listAction(TaskRepository $taskRepository)
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository(Task::class)->findAll()]);
+        $tasks = $taskRepository->findAll();
+        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
     }
 
     /**
      * @Route("/tasks/create", name="task_create")
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param UserInterface $user
+     * @return RedirectResponse|Response
      */
-    public function createAction(Request $request, EntityManagerInterface $entityManager)
+    public function createAction(Request $request, EntityManagerInterface $entityManager, UserInterface $user)
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $task->setAuthor($user);
             $entityManager->persist($task);
             $entityManager->flush();
 
-            $this->addFlash('success', 'La tâche a été bien été ajoutée.');
+            $this->addFlash('success', 'La tâche a bien été ajoutée.');
 
             return $this->redirectToRoute('task_list');
         }
@@ -42,15 +54,21 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/tasks/{id}/edit", name="task_edit")
+     * @Route("/tasks/{taskId}/edit", name="task_edit")
+     * @param string $taskId
+     * @param TaskRepository $taskRepository
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
      */
-    public function editAction(Task $task, Request $request, EntityManagerInterface $entityManager)
+    public function editAction(string $taskId, TaskRepository $taskRepository, Request $request, EntityManagerInterface $entityManager)
     {
+        $task = $taskRepository->find($taskId);
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
@@ -65,10 +83,15 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/tasks/{id}/toggle", name="task_toggle")
+     * @Route("/tasks/{taskId}/toggle", name="task_toggle")
+     * @param string $taskId
+     * @param TaskRepository $taskRepository
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse
      */
-    public function toggleTaskAction(Task $task, EntityManagerInterface $entityManager)
+    public function toggleTaskAction(string $taskId, TaskRepository $taskRepository, EntityManagerInterface $entityManager): RedirectResponse
     {
+        $task = $taskRepository->find($taskId);
         $task->toggle(!$task->isDone());
         $entityManager->flush();
 
@@ -78,10 +101,15 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/tasks/{id}/delete", name="task_delete")
+     * @Route("/tasks/{taskId}/delete", name="task_delete")
+     * @param string $taskId
+     * @param TaskRepository $taskRepository
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse
      */
-    public function deleteTaskAction(Task $task, EntityManagerInterface $entityManager)
+    public function deleteTaskAction(string $taskId, TaskRepository $taskRepository, EntityManagerInterface $entityManager): RedirectResponse
     {
+        $task = $taskRepository->find($taskId);
         $entityManager->remove($task);
         $entityManager->flush();
 
