@@ -41,12 +41,13 @@
         "symfony/symfony": "*"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "4.0.*",
+        "symfony/phpunit-bridge": "^5.2",
         "symfony/dotenv": "^5.2",
         "symfony/maker-bundle": "^1.30",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "symfony/stopwatch": "^5.2",
-        "symfony/web-profiler-bundle": "^5.0"
+        "symfony/web-profiler-bundle": "^5.0",
+        "phpunit/phpunit": "^8.5"
     },
     "scripts": {
         "post-install-cmd": [
