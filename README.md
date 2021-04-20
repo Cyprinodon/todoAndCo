@@ -13,8 +13,8 @@ Vous désirez contribuez ? Vous pouvez lire le document contributing.md, présen
 
 ## Introduction
 **ToDo & Co** représente le projet 8 du parcours *développeur Web Symfony*. Il demande la mise à niveau et la maintenance d'un projet symfony dépassé.
-    - Ecriture d'un Rapport d'Audit
-    - Mise à niveau du projet en version 'Long Term Support'
+- Ecriture d'un Rapport d'Audit
+- Mise à niveau du projet en version 'Long Term Support'
 
 ## Installation
   1. Récupérer une copie du projet
