@@ -21,7 +21,8 @@ class AppFixtures extends Fixture
                 "administrator" => [
                     "username" => "Administrateur",
                     "email" => "ocdummy.master@gmail.com",
-                    "password" => "admin"
+                    "password" => "admin",
+                    "role" => "ROLE_ADMIN"
                 ],
             ],
             "tasks" => [
@@ -63,6 +64,10 @@ class AppFixtures extends Fixture
             $user->setUsername($userData["username"]);
             $user->setEmail($userData["email"]);
             $user->setPassword($this->passwordEncoder->encodePassword($user, $userData["password"]));
+
+            if(array_key_exists("role", $userData)) {
+                $user->addRole($userData["role"]);
+            }
             $manager->persist($user);
             array_push($authors, $user);
         }

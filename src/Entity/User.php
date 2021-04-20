@@ -39,6 +39,16 @@ class User implements UserInterface
      */
     private $email;
 
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles;
+
+    public function __construct()
+    {
+        $this->roles = ["ROLE_USER"];
+    }
+
     public function getId()
     {
         return $this->id;
@@ -81,7 +91,39 @@ class User implements UserInterface
 
     public function getRoles(): array
     {
-        return array('ROLE_USER');
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles)
+    {
+        //Le rôle ROLE_USER doit toujours figurer dans la liste des rôles.
+        if(in_array("ROLE_USER", $roles)) {
+            $this->roles = $roles;
+        }
+        else {
+            $this->roles = array_merge($roles, ["ROLE_USER"]);
+        }
+    }
+
+    public function addRole(string $role)
+    {
+        if(in_array($role, $this->roles)) {
+            return;
+        }
+
+        array_push($this->roles, $role);
+    }
+
+    public function removeRole(string $role)
+    {
+        if(!in_array($role, $this->roles)) {
+            return;
+        }
+
+        $roles = array_filter($this->roles, function ($roleEntry) use ($role) {
+            return $roleEntry != $role;
+        });
+        $this->roles = $roles;
     }
 
     public function eraseCredentials()
