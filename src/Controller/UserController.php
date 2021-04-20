@@ -38,8 +38,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $roles = $form->get('role')->getData();
-            $user->setRoles($roles);
+            $role = $form->get('role')->getData();
+            $user->setRoles([$role]);
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
@@ -47,6 +47,10 @@ class UserController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
+
+            if(!$this->isGranted('USER_ADMIN')) {
+                return $this->redirectToRoute('task_list');
+            }
 
             return $this->redirectToRoute('user_list');
         }
