@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -15,6 +16,23 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, ['label' => "Nom d'utilisateur"])
+            ->add('role', ChoiceType::class, [
+                'label' => "Rôle",
+                'choices' => [
+                    'administrator' => "ROLE_ADMIN",
+                    'user' => "ROLE_USER"
+                ],
+                'choice_label' => function ($choice, $key, $value) {
+                    switch($key) {
+                        case "administrator": return "Administrateur";
+                        case "user": return "Utilisateur";
+                    }
+                },
+                'expanded' => true,
+                'multiple' => false,
+                'required' => true,
+                'mapped' => false,
+            ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les deux mots de passe doivent correspondre.',
