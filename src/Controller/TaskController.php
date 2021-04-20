@@ -20,10 +20,14 @@ class TaskController extends AbstractController
      * @param TaskRepository $taskRepository
      * @return Response
      */
-    public function listAction(TaskRepository $taskRepository)
+    public function listAction(TaskRepository $taskRepository): Response
     {
         $tasks = $taskRepository->findAll();
-        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
+        $user = $this->getUser();
+        return $this->render('task/list.html.twig', [
+                'tasks' => $tasks,
+                'user' => $user
+            ]);
     }
 
     /**
@@ -110,6 +114,17 @@ class TaskController extends AbstractController
     public function deleteTaskAction(string $taskId, TaskRepository $taskRepository, EntityManagerInterface $entityManager): RedirectResponse
     {
         $task = $taskRepository->find($taskId);
+
+        if(!$task instanceof Task) {
+            $this->addFlash('error', 'La tâche que vous cherchez à supprimer n\'existe pas.');
+            return $this->redirectToRoute('task_list');
+        }
+
+        $user = $this->getUser();
+        if($task->getAuthor() != $user && !$this->isGranted('USER_ADMIN', $user)) {
+            $this->addFlash('warning', 'Vous devez être l\'auteur de cette tâche ou administrateur pour pouvoir la supprimer.');
+            return $this->redirectToRoute('task_list');
+        }
         $entityManager->remove($task);
         $entityManager->flush();
 
