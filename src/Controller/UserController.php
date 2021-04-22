@@ -76,7 +76,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $role = $form->get('role')->getData();
-            $user->setRoles($role);
+            $user->setRoles([$role]);
             $password = $passwordEncoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
