@@ -10,9 +10,10 @@ class UserControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', 'users/list');
+        $client->request('GET', 'users');
+        $statusCode = $client->getResponse()->getStatusCode();
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $statusCode);
     }
 
     public function testEdit()
@@ -20,7 +21,8 @@ class UserControllerTest extends WebTestCase
         $client = static::createClient();
 
         $client->request('GET', 'users/1/edit');
+        $statusCode = $client->getResponse()->getStatusCode();
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $statusCode);
     }
 }

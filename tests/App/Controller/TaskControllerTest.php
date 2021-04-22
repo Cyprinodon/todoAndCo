@@ -12,8 +12,9 @@ class TaskControllerTest extends WebTestCase
         $client = static::createClient();
 
         $client->request('GET', '/tasks');
+        $statusCode = $client->getResponse()->getStatusCode();
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $statusCode);
     }
 
     public function testCreate()
@@ -21,8 +22,9 @@ class TaskControllerTest extends WebTestCase
         $client = static::createClient();
 
         $client->request('GET', '/tasks/create');
+        $statusCode = $client->getResponse()->getStatusCode();
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $statusCode);
     }
 
     public function testEdit()
@@ -30,7 +32,8 @@ class TaskControllerTest extends WebTestCase
         $client = static::createClient();
 
         $client->request('GET', '/tasks/20/edit');
+        $statusCode = $client->getResponse()->getStatusCode();
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $statusCode);
     }
 }
