@@ -26,19 +26,24 @@ Vous désirez contribuez ? Vous pouvez lire le document contributing.md, présen
       - Sauvegarder le fichier dans l'emplacement de votre choix
       - Faire un clic droit sur l'archive et choisissez **Extraire vers...**
       - Choisir l'emplacement qui vous convient
-      
+  
+  2. Installer les dépendences du projet
+  ```
+  composer install
+  ```
+  
   3. Configurer les variables d'environnement
       - Dans le fichier .env, ajouter/modifier les variables suivantes:
           * APP_ENV => mode d'exécution de l'application. Mettez "prod" pour passer en production, "test" pour passer en environnement de test et "dev" pour passer en mode debug. Les fixtures ne seront chargées qu'en environnement "dev"
           * DATABASE_URL => les identifiants de la base de données: `mysql://user:password@127.0.0.1:3306/db_name?serverVersion=5.7` où `user` corresponds au nom du compte ayant accès à la base de données, `password` corresponds au mot de passe et `db_name` au nom de la base de données
       
-  2. Installer la base de données
+  4. Installer la base de données
       - Ouvrir la console en ligne de commande de votre choix et déplacez-vous jusque dans le dossier racine du projet *(commande `cd <chemin>` sur windows)* 
       - Créer la base de données en entrant la commande `bin/console doctrine:database:create`
       - Mettre à jour la structure de la base de données en entrant la commande `bin/console doctrine:migrations:migrate`
       - Charger le jeu de fausses données dans la base de données en entrant la commande `bin/console doctrine:fixtures:load`
           
-  4. L'application est déployée
+  5. L'application est déployée
 
 ## Utilisation
 Si vous n'êtes pas connecté, l'application vous redirigera immanquablement sur *(domain)/login* où vous pourrez créer un nouvel utilisateur. Une fois connecté, vous pourrez naviguer sur les routes suivantes :
