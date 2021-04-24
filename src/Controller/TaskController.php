@@ -121,7 +121,7 @@ class TaskController extends AbstractController
         }
 
         $user = $this->getUser();
-        if($task->getAuthor() != $user && !$this->isGranted('USER_ADMIN', $user)) {
+        if($task->getAuthor() != $user && !$this->isGranted('ROLE_ADMIN', $user)) {
             $this->addFlash('warning', 'Vous devez être l\'auteur de cette tâche ou administrateur pour pouvoir la supprimer.');
             return $this->redirectToRoute('task_list');
         }
